@@ -1,3 +1,10 @@
+import guide1 from "@assets/generated_images/professional_hiking_guide_portrait.png";
+import guide2 from "@assets/generated_images/experienced_mountain_guide_portrait.png";
+import babysitter1 from "@assets/generated_images/friendly_babysitter_with_kids_outdoors.png";
+import equipment1 from "@assets/generated_images/hiking_backpack_equipment.png";
+import equipment2 from "@assets/generated_images/hiking_boots_equipment.png";
+import equipment3 from "@assets/generated_images/camping_tent_equipment.png";
+
 import heroImage from "@assets/generated_images/hero_image_of_a_majestic_mountain_landscape.png";
 import lahijImage from "@assets/generated_images/hiking_trail_in_a_green_canyon.png";
 import shahdagImage from "@assets/generated_images/snowy_mountain_peak_hiking_trail.png";
@@ -41,6 +48,29 @@ export interface User {
   badges: UserBadge[];
   totalKm: number;
   totalElevation: number;
+}
+
+export interface Service {
+  id: number;
+  type: "Guide" | "Babysitter" | "Equipment";
+  name: string;
+  price_per_day: number;
+  rating: number;
+  image: string;
+  description: string;
+  available: boolean;
+}
+
+export interface GroupHike {
+  id: number;
+  title: string;
+  routeId: number;
+  date: string;
+  time: string;
+  host: string;
+  participants: number;
+  maxParticipants: number;
+  description: string;
 }
 
 export const routes: Route[] = [
@@ -180,5 +210,104 @@ export const tips = [
     title: "Check Forecast",
     description: "Always check the local mountain forecast before heading out. Conditions change rapidly.",
     icon: "CloudSun"
+  }
+];
+
+export const services: Service[] = [
+  {
+    id: 1,
+    type: "Guide",
+    name: "Elvin Mammadov",
+    price_per_day: 50,
+    rating: 4.9,
+    image: guide1,
+    description: "Certified mountain guide with 10 years experience in the Greater Caucasus.",
+    available: true
+  },
+  {
+    id: 2,
+    type: "Guide",
+    name: "Sarah Aliyeva",
+    price_per_day: 60,
+    rating: 5.0,
+    image: guide2,
+    description: "Expert in high-altitude trekking and wilderness survival skills.",
+    available: true
+  },
+  {
+    id: 3,
+    type: "Babysitter",
+    name: "Leyla Karimova",
+    price_per_day: 35,
+    rating: 4.8,
+    image: babysitter1,
+    description: "Nature-loving babysitter who organizes outdoor games for kids while you hike.",
+    available: true
+  },
+  {
+    id: 4,
+    type: "Equipment",
+    name: "Pro Hiker Backpack (50L)",
+    price_per_day: 15,
+    rating: 4.7,
+    image: equipment1,
+    description: "Lightweight, waterproof backpack suitable for multi-day treks.",
+    available: true
+  },
+  {
+    id: 5,
+    type: "Equipment",
+    name: "Alpine Trekking Boots",
+    price_per_day: 12,
+    rating: 4.6,
+    image: equipment2,
+    description: "Sturdy boots with excellent ankle support for rugged terrain.",
+    available: true
+  },
+  {
+    id: 6,
+    type: "Equipment",
+    name: "2-Person Tent",
+    price_per_day: 25,
+    rating: 4.8,
+    image: equipment3,
+    description: "Easy to set up, weather-resistant tent for camping trips.",
+    available: true
+  }
+];
+
+export const groupHikes: GroupHike[] = [
+  {
+    id: 1,
+    title: "Weekend Waterfall Chase",
+    routeId: 6,
+    date: "2025-06-15",
+    time: "09:00 AM",
+    host: "Nature Lovers Club",
+    participants: 8,
+    maxParticipants: 15,
+    description: "Join us for a refreshing hike to Yeddi Gozel Waterfall. Beginners welcome!"
+  },
+  {
+    id: 2,
+    title: "Shahdag Summit Push",
+    routeId: 2,
+    date: "2025-07-20",
+    time: "05:00 AM",
+    host: "Extreme Hikers AZ",
+    participants: 4,
+    maxParticipants: 10,
+    description: "Attempting the summit of Shahdag. Only for experienced hikers with proper gear."
+  },
+  {
+    id: 3,
+    title: "Sunset at Candy Cane Mountains",
+    routeId: 5,
+    date: "2025-05-28",
+    time: "04:30 PM",
+    host: "Photo Trekkers",
+    participants: 12,
+    maxParticipants: 20,
+    description: "A relaxed hike to capture the golden hour at the colorful mountains. Bring your camera!"
   }
 ];

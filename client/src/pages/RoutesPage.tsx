@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { routes } from "@/lib/data";
+import { useLanguage } from "@/lib/language";
 import RouteCard from "@/components/RouteCard";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -10,6 +11,7 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 
 export default function RoutesPage() {
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState<string>("all");
   const [regionFilter, setRegionFilter] = useState<string>("all");
@@ -31,8 +33,8 @@ export default function RoutesPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-4xl font-display font-bold text-foreground mb-2">Explore Routes</h1>
-          <p className="text-muted-foreground">Find your next adventure among Azerbaijan's most beautiful trails.</p>
+          <h1 className="text-4xl font-display font-bold text-foreground mb-2">{t("routes.title")}</h1>
+          <p className="text-muted-foreground">{t("routes.subtitle")}</p>
         </div>
       </div>
 
@@ -41,17 +43,17 @@ export default function RoutesPage() {
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input 
-            placeholder="Search routes or regions..." 
+            placeholder={t("routes.search")}
             className="pl-10"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         
-        <div className="flex gap-2 overflow-x-auto pb-2 lg:pb-0">
+        <div className="flex flex-col sm:flex-row gap-2 overflow-x-auto pb-2 lg:pb-0">
           <Select value={difficultyFilter} onValueChange={setDifficultyFilter}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Difficulty" />
+            <SelectTrigger className="w-full sm:w-[140px]">
+              <SelectValue placeholder={t("routes.filter.difficulty")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Any Difficulty</SelectItem>
@@ -62,8 +64,8 @@ export default function RoutesPage() {
           </Select>
 
           <Select value={regionFilter} onValueChange={setRegionFilter}>
-            <SelectTrigger className="w-[140px]">
-              <SelectValue placeholder="Region" />
+            <SelectTrigger className="w-full sm:w-[140px]">
+              <SelectValue placeholder={t("routes.filter.region")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Any Region</SelectItem>
@@ -73,6 +75,7 @@ export default function RoutesPage() {
             </SelectContent>
           </Select>
 
+          {/* Desktop/Mobile unified filtering */}
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" className="flex items-center gap-2">
@@ -85,8 +88,11 @@ export default function RoutesPage() {
                 <SheetTitle>Filter Routes</SheetTitle>
               </SheetHeader>
               <div className="py-6 space-y-6">
-                <div className="space-y-2">
-                  <Label>Max Distance: {maxDistance} km</Label>
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <Label>{t("routes.filter.distance")}</Label>
+                    <span className="text-sm font-medium text-primary">{maxDistance} km</span>
+                  </div>
                   <Slider 
                     defaultValue={[30]} 
                     max={50} 
@@ -94,6 +100,10 @@ export default function RoutesPage() {
                     value={[maxDistance]}
                     onValueChange={(vals) => setMaxDistance(vals[0])}
                   />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>0 km</span>
+                    <span>50 km</span>
+                  </div>
                 </div>
               </div>
             </SheetContent>
@@ -113,7 +123,7 @@ export default function RoutesPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted mb-4">
             <Search className="h-8 w-8 text-muted-foreground" />
           </div>
-          <h3 className="text-xl font-bold mb-2">No routes found</h3>
+          <h3 className="text-xl font-bold mb-2">{t("routes.empty")}</h3>
           <p className="text-muted-foreground mb-6">Try adjusting your search or filters to find what you're looking for.</p>
           <Button 
             onClick={() => {

@@ -1,4 +1,8 @@
+import { useLanguage } from "@/lib/language";
+
 export default function Footer() {
+  const { t } = useLanguage();
+  
   return (
     <footer className="bg-secondary py-12 mt-24">
       <div className="container mx-auto px-4">
@@ -40,8 +44,8 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2025 HikeAZ. All rights reserved.</p>
-          <p>Designed with ♥️ in Azerbaijan</p>
+          <p>{t("footer.rights")}</p>
+          <p>{t("footer.made_with")}</p>
         </div>
       </div>
     </footer>
