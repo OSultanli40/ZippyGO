@@ -1,6 +1,6 @@
 import { useRoute } from "wouter";
-import { routes, initialUser, User } from "@/lib/data";
-import { useState } from "react";
+import { routes } from "@/lib/data";
+import { useUser } from "@/lib/userContext"; // Import useUser
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, TrendingUp, Ruler, CheckCircle, Share2, Heart, CloudSun } from "lucide-react";
@@ -11,11 +11,10 @@ import { Card } from "@/components/ui/card";
 export default function RouteDetailPage() {
   const [match, params] = useRoute("/route/:id");
   const { toast } = useToast();
+  const { user, completeHike } = useUser(); // Use global user context
   const id = params ? parseInt(params.id) : 0;
   const route = routes.find(r => r.id === id);
   
-  // Mock user state for interaction
-  const [user, setUser] = useState<User>(initialUser);
   const isCompleted = user.completedHikes.includes(id);
 
   if (!route) return <div className="container py-20 text-center">Route not found</div>;
@@ -23,10 +22,7 @@ export default function RouteDetailPage() {
   const handleMarkCompleted = () => {
     if (isCompleted) return;
     
-    setUser(prev => ({
-      ...prev,
-      completedHikes: [...prev.completedHikes, id]
-    }));
+    completeHike(id, route.distance_km, route.elevation_m);
     
     toast({
       title: "Hike Completed! 🎉",

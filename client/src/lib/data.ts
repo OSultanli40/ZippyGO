@@ -51,13 +51,14 @@ export interface User {
 }
 
 export interface Service {
-  id: number;
+  id: string;
   type: "Guide" | "Babysitter" | "Equipment";
   name: string;
   price_per_day: number;
   rating: number;
   image: string;
   description: string;
+  fullDescription: string;
   available: boolean;
 }
 
@@ -69,6 +70,7 @@ export interface GroupHike {
   time: string;
   host: string;
   participants: number;
+  participantNames: string[];
   maxParticipants: number;
   description: string;
 }
@@ -215,63 +217,69 @@ export const tips = [
 
 export const services: Service[] = [
   {
-    id: 1,
+    id: "elvinmammadov",
     type: "Guide",
     name: "Elvin Mammadov",
     price_per_day: 50,
     rating: 4.9,
     image: guide1,
     description: "Certified mountain guide with 10 years experience in the Greater Caucasus.",
+    fullDescription: "Elvin is a UIAA certified guide with extensive knowledge of the Shahdag and Bazarduzu regions. He specializes in both summer trekking and winter mountaineering. He is also trained in first aid and speaks English, Russian, and Azerbaijani fluently.",
     available: true
   },
   {
-    id: 2,
+    id: "sarahaliyeva",
     type: "Guide",
     name: "Sarah Aliyeva",
     price_per_day: 60,
     rating: 5.0,
     image: guide2,
     description: "Expert in high-altitude trekking and wilderness survival skills.",
+    fullDescription: "Sarah is one of Azerbaijan's premier high-altitude guides. She has led expeditions across the Caucasus and focuses on sustainable trekking practices. Her tours often include workshops on navigation and survival skills.",
     available: true
   },
   {
-    id: 3,
+    id: "leylakarimova",
     type: "Babysitter",
     name: "Leyla Karimova",
     price_per_day: 35,
     rating: 4.8,
     image: babysitter1,
     description: "Nature-loving babysitter who organizes outdoor games for kids while you hike.",
+    fullDescription: "Leyla combines childcare with outdoor education. While you tackle the harder trails, your children will be safe at base camp learning about local flora and fauna, playing nature-themed games, and enjoying the fresh air.",
     available: true
   },
   {
-    id: 4,
+    id: "backpack50l",
     type: "Equipment",
     name: "Pro Hiker Backpack (50L)",
     price_per_day: 15,
     rating: 4.7,
     image: equipment1,
     description: "Lightweight, waterproof backpack suitable for multi-day treks.",
+    fullDescription: "This 50L backpack is designed for comfort and durability. Features include a fully adjustable suspension system, integrated rain cover, and multiple compartments for organized packing. Perfect for 2-3 day hiking trips.",
     available: true
   },
   {
-    id: 5,
+    id: "trekkingboots",
     type: "Equipment",
     name: "Alpine Trekking Boots",
     price_per_day: 12,
     rating: 4.6,
     image: equipment2,
     description: "Sturdy boots with excellent ankle support for rugged terrain.",
+    fullDescription: "High-quality leather boots with Vibram soles for superior grip on rocky and slippery surfaces. Waterproof Gore-Tex lining ensures your feet stay dry in all conditions. Available in sizes 36-46.",
     available: true
   },
   {
-    id: 6,
+    id: "tent2person",
     type: "Equipment",
     name: "2-Person Tent",
     price_per_day: 25,
     rating: 4.8,
     image: equipment3,
     description: "Easy to set up, weather-resistant tent for camping trips.",
+    fullDescription: "A lightweight 3-season tent that offers great protection against wind and rain. Quick and easy to pitch with color-coded poles. Spacious interior with double vestibules for gear storage.",
     available: true
   }
 ];
@@ -285,6 +293,7 @@ export const groupHikes: GroupHike[] = [
     time: "09:00 AM",
     host: "Nature Lovers Club",
     participants: 8,
+    participantNames: ["John Doe", "Alice Smith", "Murad Aliyev", "Nigar Qasimli"],
     maxParticipants: 15,
     description: "Join us for a refreshing hike to Yeddi Gozel Waterfall. Beginners welcome!"
   },
@@ -296,6 +305,7 @@ export const groupHikes: GroupHike[] = [
     time: "05:00 AM",
     host: "Extreme Hikers AZ",
     participants: 4,
+    participantNames: ["Mike Johnson", "Elena Petrova"],
     maxParticipants: 10,
     description: "Attempting the summit of Shahdag. Only for experienced hikers with proper gear."
   },
@@ -307,6 +317,7 @@ export const groupHikes: GroupHike[] = [
     time: "04:30 PM",
     host: "Photo Trekkers",
     participants: 12,
+    participantNames: ["Samir Guliyev", "Aynur Mammadova", "David Wilson"],
     maxParticipants: 20,
     description: "A relaxed hike to capture the golden hour at the colorful mountains. Bring your camera!"
   }

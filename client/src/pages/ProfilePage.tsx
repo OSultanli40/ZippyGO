@@ -1,12 +1,15 @@
-import { initialUser, routes } from "@/lib/data";
+import { routes } from "@/lib/data";
+import { useUser } from "@/lib/userContext"; // Import useUser
+import { useLanguage } from "@/lib/language";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Award, Map, Mountain, Trophy } from "lucide-react";
+import { Award, CheckCircle } from "lucide-react";
 import RouteCard from "@/components/RouteCard";
 
 export default function ProfilePage() {
-  const user = initialUser;
+  const { user } = useUser(); // Use global user context
+  const { t } = useLanguage();
   const completedRoutes = routes.filter(r => user.completedHikes.includes(r.id));
 
   return (
@@ -29,15 +32,15 @@ export default function ProfilePage() {
           <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-8">
             <div className="text-center">
               <span className="block text-2xl font-bold text-foreground">{user.completedHikes.length}</span>
-              <span className="text-xs text-muted-foreground uppercase tracking-wider">Hikes</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">{t("profile.hikes")}</span>
             </div>
             <div className="text-center">
               <span className="block text-2xl font-bold text-foreground">{user.totalKm}</span>
-              <span className="text-xs text-muted-foreground uppercase tracking-wider">Kilometers</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">{t("profile.kilometers")}</span>
             </div>
             <div className="text-center">
               <span className="block text-2xl font-bold text-foreground">{user.totalElevation}m</span>
-              <span className="text-xs text-muted-foreground uppercase tracking-wider">Elevation</span>
+              <span className="text-xs text-muted-foreground uppercase tracking-wider">{t("profile.elevation")}</span>
             </div>
           </div>
         </div>
@@ -45,8 +48,8 @@ export default function ProfilePage() {
 
       <Tabs defaultValue="badges" className="w-full">
         <TabsList className="grid w-full max-w-[400px] grid-cols-2 mb-8">
-          <TabsTrigger value="badges">Badges</TabsTrigger>
-          <TabsTrigger value="history">Hike History</TabsTrigger>
+          <TabsTrigger value="badges">{t("profile.badges")}</TabsTrigger>
+          <TabsTrigger value="history">{t("profile.history")}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="badges" className="animate-in fade-in-50">
@@ -63,12 +66,12 @@ export default function ProfilePage() {
                   <p className="text-sm text-muted-foreground mb-4">{badge.description}</p>
                   {badge.earned ? (
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      Earned {badge.dateEarned}
+                      {t("profile.earned")} {badge.dateEarned}
                     </span>
                   ) : (
                     <div className="space-y-2">
                       <Progress value={33} className="h-2" />
-                      <p className="text-xs text-muted-foreground">1/3 progress</p>
+                      <p className="text-xs text-muted-foreground">1/3 {t("profile.progress")}</p>
                     </div>
                   )}
                 </CardContent>
@@ -98,6 +101,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-// Helper import needed for the check icon
-import { CheckCircle } from "lucide-react";

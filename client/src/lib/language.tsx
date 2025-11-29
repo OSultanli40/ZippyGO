@@ -42,12 +42,26 @@ const translations = {
     "services.tab.equipment": "Equipment",
     "services.book": "Book Now",
     "services.per_day": "/ day",
+    "services.available": "Available",
+    "services.booked": "Booked",
+    "services.verified": "Verified Professional",
     
     "community.title": "Community Hikes",
     "community.subtitle": "Join scheduled group hikes and meet fellow adventurers.",
     "community.create": "Create Hike",
     "community.join": "Join Hike",
+    "community.full": "Full",
+    "community.joined": "Joined",
     "community.participants": "participants",
+    "community.hosted_by": "Hosted by",
+    
+    "profile.badges": "Badges",
+    "profile.history": "Hike History",
+    "profile.hikes": "Hikes",
+    "profile.kilometers": "Kilometers",
+    "profile.elevation": "Elevation",
+    "profile.earned": "Earned",
+    "profile.progress": "progress",
     
     "footer.rights": "© 2025 HikeAZ. All rights reserved.",
     "footer.made_with": "Designed with ♥️ in Azerbaijan"
@@ -85,12 +99,26 @@ const translations = {
     "services.tab.equipment": "Avadanlıq",
     "services.book": "İndi Bron Et",
     "services.per_day": "/ gün",
+    "services.available": "Mövcuddur",
+    "services.booked": "Məşğuldur",
+    "services.verified": "Təsdiqlənmiş Peşəkar",
     
     "community.title": "İcma Yürüşləri",
     "community.subtitle": "Planlaşdırılmış qrup yürüşlərinə qoşulun və digər macəraçılarla tanış olun.",
     "community.create": "Yürüş Yarat",
     "community.join": "Qoşul",
+    "community.full": "Dolu",
+    "community.joined": "Qoşuldu",
     "community.participants": "iştirakçı",
+    "community.hosted_by": "Təşkilatçı:",
+    
+    "profile.badges": "Nişanlar",
+    "profile.history": "Yürüş Tarixçəsi",
+    "profile.hikes": "Yürüşlər",
+    "profile.kilometers": "Kilometr",
+    "profile.elevation": "Hündürlük",
+    "profile.earned": "Qazanılıb",
+    "profile.progress": "irəliləyiş",
     
     "footer.rights": "© 2025 HikeAZ. Bütün hüquqlar qorunur.",
     "footer.made_with": "Azərbaycanda ♥️ ilə hazırlanıb"

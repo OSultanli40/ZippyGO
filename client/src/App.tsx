@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/lib/language";
+import { UserProvider } from "@/lib/userContext"; // Import UserProvider
 import NotFound from "@/pages/not-found";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -14,6 +15,7 @@ import ProfilePage from "@/pages/ProfilePage";
 import SafetyPage from "@/pages/SafetyPage";
 import RouteDetailPage from "@/pages/RouteDetailPage";
 import ServicesPage from "@/pages/ServicesPage";
+import ServiceDetailPage from "@/pages/ServiceDetailPage";
 import CommunityPage from "@/pages/CommunityPage";
 
 function Router() {
@@ -26,6 +28,7 @@ function Router() {
           <Route path="/routes" component={RoutesPage} />
           <Route path="/map" component={MapPage} />
           <Route path="/services" component={ServicesPage} />
+          <Route path="/service/:id" component={ServiceDetailPage} />
           <Route path="/community" component={CommunityPage} />
           <Route path="/profile" component={ProfilePage} />
           <Route path="/safety" component={SafetyPage} />
@@ -42,10 +45,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
+        <UserProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Router />
+          </TooltipProvider>
+        </UserProvider>
       </LanguageProvider>
     </QueryClientProvider>
   );

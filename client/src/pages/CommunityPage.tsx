@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { groupHikes, routes } from "@/lib/data";
+import { groupHikes, routes, initialUser } from "@/lib/data";
 import { useLanguage } from "@/lib/language";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,14 +7,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar, Clock, MapPin, User, Users } from "lucide-react";
+import { Calendar, Clock, MapPin, User, Users, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export default function CommunityPage() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [hikes, setHikes] = useState(groupHikes);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [joinedHikes, setJoinedHikes] = useState<number[]>([]);
   
   // Form state
   const [newHike, setNewHike] = useState({
@@ -27,6 +29,15 @@ export default function CommunityPage() {
   });
 
   const handleJoin = (hikeId: number) => {
+    if (joinedHikes.includes(hikeId)) {
+      toast({
+        title: "Already Joined",
+        description: "You are already a participant in this hike.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setHikes(prev => prev.map(hike => {
       if (hike.id === hikeId && hike.participants < hike.maxParticipants) {
         toast({
@@ -34,7 +45,12 @@ export default function CommunityPage() {
           description: `You've successfully joined "${hike.title}".`,
           duration: 3000,
         });
-        return { ...hike, participants: hike.participants + 1 };
+        setJoinedHikes([...joinedHikes, hikeId]);
+        return { 
+          ...hike, 
+          participants: hike.participants + 1,
+          participantNames: [...(hike.participantNames || []), initialUser.name] 
+        };
       }
       return hike;
     }));
@@ -56,13 +72,15 @@ export default function CommunityPage() {
       routeId: parseInt(newHike.routeId),
       date: newHike.date,
       time: newHike.time || "09:00 AM",
-      host: "You",
+      host: initialUser.name,
       participants: 1,
+      participantNames: [initialUser.name],
       maxParticipants: parseInt(newHike.maxParticipants),
       description: newHike.description || "Join me for a hike!"
     };
 
     setHikes([createdHike, ...hikes]);
+    setJoinedHikes([...joinedHikes, createdHike.id]);
     setIsCreateOpen(false);
     toast({
       title: "Hike Created! 🏔️",
@@ -177,9 +195,12 @@ export default function CommunityPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {hikes.map((hike) => {
           const route = routes.find(r => r.id === hike.routeId);
+          const isJoined = joinedHikes.includes(hike.id);
+          const isFull = hike.participants >= hike.maxParticipants;
+          
           return (
-            <Card key={hike.id} className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow">
-              <div className="h-32 overflow-hidden relative bg-muted">
+            <Card key={hike.id} className="overflow-hidden border-border shadow-sm hover:shadow-md transition-shadow flex flex-col">
+              <div className="h-32 overflow-hidden relative bg-muted shrink-0">
                 <img 
                   src={route?.image} 
                   alt={hike.title} 
@@ -189,7 +210,7 @@ export default function CommunityPage() {
                   <h3 className="text-white font-bold text-lg truncate">{hike.title}</h3>
                 </div>
               </div>
-              <CardContent className="pt-4 space-y-3">
+              <CardContent className="pt-4 space-y-3 flex-grow">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <MapPin className="h-4 w-4 text-primary" />
                   <span className="truncate">{route?.name}</span>
@@ -206,7 +227,7 @@ export default function CommunityPage() {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <User className="h-4 w-4" />
-                  <span>Hosted by <span className="font-medium text-foreground">{hike.host}</span></span>
+                  <span>{t("community.hosted_by")} <span className="font-medium text-foreground">{hike.host}</span></span>
                 </div>
                 <p className="text-sm text-muted-foreground line-clamp-2 bg-secondary/30 p-2 rounded-md">
                   {hike.description}
@@ -214,7 +235,22 @@ export default function CommunityPage() {
                 
                 <div className="mt-2">
                   <div className="flex justify-between text-xs mb-1">
-                    <span>{hike.participants} joined</span>
+                    <div className="flex items-center gap-1">
+                      <span>{hike.participants} {t("community.participants")}</span>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Info className="h-3 w-3 text-muted-foreground" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="font-bold mb-1">Participants:</p>
+                          <ul className="list-disc pl-4 text-xs">
+                            {hike.participantNames?.map((name, i) => (
+                              <li key={i}>{name}</li>
+                            ))}
+                          </ul>
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
                     <span>{hike.maxParticipants} max</span>
                   </div>
                   <div className="w-full bg-secondary rounded-full h-2">
@@ -229,9 +265,10 @@ export default function CommunityPage() {
                 <Button 
                   className="w-full" 
                   onClick={() => handleJoin(hike.id)}
-                  disabled={hike.participants >= hike.maxParticipants}
+                  disabled={isFull || isJoined}
+                  variant={isJoined ? "secondary" : "default"}
                 >
-                  {hike.participants >= hike.maxParticipants ? 'Full' : t("community.join")}
+                  {isJoined ? t("community.joined") : isFull ? t("community.full") : t("community.join")}
                 </Button>
               </CardFooter>
             </Card>
