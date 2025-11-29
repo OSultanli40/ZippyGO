@@ -1,18 +1,27 @@
 import { Link } from "wouter";
 import { routes, services } from "@/lib/data";
 import { useLanguage } from "@/lib/language";
+import { useUser } from "@/lib/userContext";
 import RouteCard from "@/components/RouteCard";
 import heroImage from "@assets/generated_images/hero_image_of_a_majestic_mountain_landscape.png";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Mountain, Trophy, Star, ShieldCheck } from "lucide-react";
+import { ArrowRight, Mountain, Trophy, Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function Home() {
   const { t } = useLanguage();
+  const { user, joinChallenge, isInChallenge } = useUser();
+  
   // Select featured routes (e.g., first 2)
   const featuredRoutes = routes.slice(0, 2);
   const recentRoutes = routes.slice(2, 5);
   const featuredServices = services.slice(0, 3); // Show top 3 services
+
+  const leaderboard = [
+    { rank: 1, name: "Elvin M.", points: 4750 },
+    { rank: 2, name: "Sarah A.", points: 4500 },
+    { rank: 3, name: "Murad K.", points: 4250 },
+  ];
 
   return (
     <div className="pb-20">
@@ -146,27 +155,44 @@ export default function Home() {
                 <p className="text-primary-foreground/80 text-lg mb-6 max-w-xl">
                   Climb 5 peaks above 2000m this month to earn the exclusive "Highlander" badge and a spot on the leaderboard.
                 </p>
-                <Button variant="secondary" size="lg" className="rounded-full font-bold">
-                  Join Challenge
+                <Button 
+                  variant={isInChallenge ? "outline" : "secondary"} 
+                  size="lg" 
+                  className="rounded-full font-bold"
+                  onClick={joinChallenge}
+                  disabled={isInChallenge}
+                >
+                  {isInChallenge ? "Joined ✓" : "Join Challenge"}
                 </Button>
               </div>
               
               <div className="w-full md:w-auto flex-shrink-0">
-                <div className="bg-white/10 backdrop-blur border border-white/20 rounded-xl p-6 max-w-sm mx-auto">
+                <div className="bg-white/10 backdrop-blur border border-white/20 rounded-xl p-6 max-w-sm mx-auto w-full md:w-80">
                   <h3 className="font-bold mb-4 border-b border-white/10 pb-2">Leaderboard</h3>
                   <div className="space-y-3">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm">
-                          {i}
+                    {leaderboard.map((entry) => (
+                      <div key={entry.rank} className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${entry.rank === 1 ? 'bg-yellow-400 text-black' : 'bg-white/20'}`}>
+                          {entry.rank}
                         </div>
-                        <div className="flex-1">
-                          <div className="h-2 w-24 bg-white/20 rounded mb-1"></div>
-                          <div className="h-2 w-12 bg-white/10 rounded"></div>
+                        <div className="flex-1 font-medium">
+                          {entry.name}
                         </div>
-                        <div className="text-sm font-bold opacity-80">{5000 - (i * 250)} pts</div>
+                        <div className="text-sm font-bold opacity-80">{entry.points} pts</div>
                       </div>
                     ))}
+                    
+                    {isInChallenge && (
+                      <div className="flex items-center gap-3 pt-3 border-t border-white/10 animate-in fade-in slide-in-from-bottom-2">
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm border border-white/50">
+                          42
+                        </div>
+                        <div className="flex-1 font-bold text-yellow-300">
+                          {user.name} (You)
+                        </div>
+                        <div className="text-sm font-bold opacity-80">0 pts</div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

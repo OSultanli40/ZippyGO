@@ -5,18 +5,29 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star, ShieldCheck, ShoppingBag } from "lucide-react";
+import { Star, ShieldCheck, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
+import { Slider } from "@/components/ui/slider";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Label } from "@/components/ui/label";
 
 export default function ServicesPage() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<string>("Guide");
+  
+  // Filter states
+  const [priceRange, setPriceRange] = useState<number[]>([0, 100]);
+  const [minRating, setMinRating] = useState<number>(0);
 
-  const filteredServices = services.filter(service => 
-    activeTab === "All" || service.type === activeTab
-  );
+  const filteredServices = services.filter(service => {
+    const matchesTab = activeTab === "All" || service.type === activeTab;
+    const matchesPrice = service.price_per_day >= priceRange[0] && service.price_per_day <= priceRange[1];
+    const matchesRating = service.rating >= minRating;
+    
+    return matchesTab && matchesPrice && matchesRating;
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -25,6 +36,50 @@ export default function ServicesPage() {
           <h1 className="text-4xl font-display font-bold text-foreground mb-2">{t("services.title")}</h1>
           <p className="text-muted-foreground">{t("services.subtitle")}</p>
         </div>
+        
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="gap-2">
+              <Filter className="h-4 w-4" /> Filters
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <h4 className="font-medium leading-none">Price Range ($/day)</h4>
+                <div className="pt-4">
+                  <Slider
+                    defaultValue={[0, 100]}
+                    max={200}
+                    step={5}
+                    value={priceRange}
+                    onValueChange={setPriceRange}
+                  />
+                </div>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>${priceRange[0]}</span>
+                  <span>${priceRange[1]}</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <h4 className="font-medium leading-none">Minimum Rating</h4>
+                <div className="flex gap-2">
+                  {[0, 3, 4, 4.5, 5].map((rating) => (
+                    <Button 
+                      key={rating}
+                      variant={minRating === rating ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setMinRating(rating)}
+                      className="flex-1"
+                    >
+                      {rating === 0 ? "Any" : `${rating}+`}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
       <Tabs defaultValue="Guide" className="w-full mb-8" onValueChange={setActiveTab}>
