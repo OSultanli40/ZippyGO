@@ -8,6 +8,7 @@ import { UserProvider } from "@/lib/userContext"; // Import UserProvider
 import NotFound from "@/pages/not-found";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ChatBot from "@/components/ChatBot";
 import Home from "@/pages/Home";
 import RoutesPage from "@/pages/RoutesPage";
 import MapPage from "@/pages/MapPage";
@@ -17,6 +18,8 @@ import RouteDetailPage from "@/pages/RouteDetailPage";
 import ServicesPage from "@/pages/ServicesPage";
 import ServiceDetailPage from "@/pages/ServiceDetailPage";
 import CommunityPage from "@/pages/CommunityPage";
+import CommunityHikeDetailPage from "@/pages/CommunityHikeDetailPage";
+import LoginPage from "@/pages/LoginPage";
 
 function Router() {
   return (
@@ -30,13 +33,16 @@ function Router() {
           <Route path="/services" component={ServicesPage} />
           <Route path="/service/:id" component={ServiceDetailPage} />
           <Route path="/community" component={CommunityPage} />
+          <Route path="/community-hike/:id" component={CommunityHikeDetailPage} />
           <Route path="/profile" component={ProfilePage} />
           <Route path="/safety" component={SafetyPage} />
           <Route path="/route/:id" component={RouteDetailPage} />
+          <Route path="/login" component={LoginPage} />
           <Route component={NotFound} />
         </Switch>
       </main>
       <Footer />
+      <ChatBot />
     </div>
   );
 }

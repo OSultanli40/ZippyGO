@@ -1,4 +1,5 @@
 import { routes } from "@/lib/data";
+import { useLanguage } from "@/lib/language";
 import MapComponent from "@/components/MapComponent";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -6,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Map as MapIcon, List } from "lucide-react";
 
 export default function MapPage() {
+  const { t } = useLanguage();
   const [selectedRouteId, setSelectedRouteId] = useState<number | null>(null);
   const selectedRoute = routes.find(r => r.id === selectedRouteId);
 
@@ -14,7 +16,7 @@ export default function MapPage() {
       {/* Sidebar - Desktop */}
       <div className="hidden md:block w-80 lg:w-96 h-full overflow-y-auto border-r border-border bg-background p-4 shrink-0">
         <h2 className="text-2xl font-display font-bold mb-4 flex items-center gap-2">
-          <MapIcon className="h-6 w-6 text-primary" /> Map Explorer
+          <MapIcon className="h-6 w-6 text-primary" /> {t("map.explorer")}
         </h2>
         <div className="space-y-3">
           {routes.map(route => (
@@ -45,7 +47,7 @@ export default function MapPage() {
         {/* Mobile Overlay List Button (could be expanded) */}
         <div className="md:hidden absolute bottom-4 left-4 right-4 z-[1000]">
           <div className="bg-background/90 backdrop-blur p-4 rounded-xl border border-border shadow-lg">
-            <h3 className="font-bold mb-2 text-sm uppercase text-muted-foreground">Tap a marker to view details</h3>
+            <h3 className="font-bold mb-2 text-sm uppercase text-muted-foreground">{t("map.tap_marker")}</h3>
           </div>
         </div>
       </div>

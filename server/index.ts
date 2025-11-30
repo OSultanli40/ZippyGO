@@ -1,7 +1,10 @@
+import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import { connectDB } from "./db";
 
 const app = express();
 const httpServer = createServer(app);
@@ -21,6 +24,35 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
+
+// Session yönetimi
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "zippygo-secret-key-change-in-production",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 gün
+    },
+  })
+);
+
+// CORS ayarları (frontend ile iletişim için)
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -60,6 +92,14 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // MongoDB bağlantısı
+  try {
+    await connectDB();
+  } catch (error) {
+    log("MongoDB bağlantısı başarısız. Lütfen MONGODB_URI environment variable'ını ayarlayın.", "error");
+    process.exit(1);
+  }
+
   await registerRoutes(httpServer, app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -89,7 +129,7 @@ app.use((req, res, next) => {
     {
       port,
       host: "0.0.0.0",
-      reusePort: true,
+//      reusePort: true,
     },
     () => {
       log(`serving on port ${port}`);

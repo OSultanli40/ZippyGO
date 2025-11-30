@@ -1,14 +1,16 @@
 import { Link, useLocation } from "wouter";
-import { Map, Mountain, User, Shield, Menu, X, ShoppingBag, Users, Home } from "lucide-react";
-import { useState } from "react";
+import { Map, Mountain, User, Shield, Menu, X, ShoppingBag, Users, Home, LogIn, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@/lib/userContext";
 
 export default function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const { user, isAuthenticated, logout } = useUser();
 
   const navItems = [
     { name: t("nav.home"), path: "/", icon: Home },
@@ -32,7 +34,7 @@ export default function Navbar() {
             <Mountain className="h-6 w-6" />
           </div>
           <span className="font-display font-bold text-xl tracking-tight text-foreground">
-            HikeAZ
+            ZippyGO
           </span>
         </Link>
 
@@ -42,14 +44,16 @@ export default function Navbar() {
             const Icon = item.icon;
             const isActive = location === item.path;
             return (
-              <Link key={item.path} href={item.path}>
-                <a className={cn(
+              <Link 
+                key={item.path} 
+                href={item.path}
+                className={cn(
                   "flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-colors hover:bg-secondary hover:text-primary",
                   isActive ? "bg-primary/10 text-primary font-semibold" : "text-muted-foreground"
-                )}>
-                  <Icon className="h-4 w-4" />
-                  {item.name}
-                </a>
+                )}
+              >
+                <Icon className="h-4 w-4" />
+                {item.name}
               </Link>
             );
           })}
@@ -61,6 +65,31 @@ export default function Navbar() {
           >
             {language.toUpperCase()}
           </Button>
+          {isAuthenticated ? (
+            <div className="flex items-center gap-2 ml-2">
+              <span className="text-sm text-muted-foreground hidden sm:inline">{user.name}</span>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={logout}
+                className="flex items-center gap-1"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Çıkış</span>
+              </Button>
+            </div>
+          ) : (
+            <Link href="/login">
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className="ml-2 flex items-center gap-1"
+              >
+                <LogIn className="h-4 w-4" />
+                <span className="hidden sm:inline">Giriş</span>
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -73,6 +102,22 @@ export default function Navbar() {
           >
             {language.toUpperCase()}
           </Button>
+          {isAuthenticated ? (
+            <Button 
+              variant="ghost" 
+              size="sm"
+              onClick={logout}
+              className="p-2"
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Link href="/login">
+              <Button variant="ghost" size="sm" className="p-2">
+                <LogIn className="h-4 w-4" />
+              </Button>
+            </Link>
+          )}
           <button 
             className="p-2 text-foreground"
             onClick={() => setIsOpen(!isOpen)}
@@ -90,17 +135,17 @@ export default function Navbar() {
               const Icon = item.icon;
               const isActive = location === item.path;
               return (
-                <Link key={item.path} href={item.path}>
-                  <a 
-                    className={cn(
-                      "flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium transition-colors hover:bg-secondary",
-                      isActive ? "bg-primary/10 text-primary" : "text-muted-foreground"
-                    )}
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <Icon className="h-5 w-5" />
-                    {item.name}
-                  </a>
+                <Link 
+                  key={item.path} 
+                  href={item.path}
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium transition-colors hover:bg-secondary",
+                    isActive ? "bg-primary/10 text-primary" : "text-muted-foreground"
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Icon className="h-5 w-5" />
+                  {item.name}
                 </Link>
               );
             })}

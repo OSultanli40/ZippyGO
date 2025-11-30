@@ -55,10 +55,10 @@ export default function RoutesPage() {
               <SelectValue placeholder={t("routes.filter.difficulty")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Any Difficulty</SelectItem>
-              <SelectItem value="Easy">Easy</SelectItem>
-              <SelectItem value="Medium">Medium</SelectItem>
-              <SelectItem value="Hard">Hard</SelectItem>
+              <SelectItem value="all">{t("routes.any_difficulty")}</SelectItem>
+              <SelectItem value="Easy">{t("routes.difficulty.easy")}</SelectItem>
+              <SelectItem value="Medium">{t("routes.difficulty.medium")}</SelectItem>
+              <SelectItem value="Hard">{t("routes.difficulty.hard")}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -67,7 +67,7 @@ export default function RoutesPage() {
               <SelectValue placeholder={t("routes.filter.region")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Any Region</SelectItem>
+              <SelectItem value="all">{t("routes.any_region")}</SelectItem>
               {regions.map(region => (
                 <SelectItem key={region} value={region}>{region}</SelectItem>
               ))}
@@ -98,7 +98,7 @@ export default function RoutesPage() {
             }}
             className="text-xs h-8 self-end md:self-center"
           >
-            Reset
+            {t("routes.reset")}
           </Button>
         </div>
       </div>
@@ -116,7 +116,7 @@ export default function RoutesPage() {
             <Search className="h-8 w-8 text-muted-foreground" />
           </div>
           <h3 className="text-xl font-bold mb-2">{t("routes.empty")}</h3>
-          <p className="text-muted-foreground mb-6">Try adjusting your search or filters to find what you're looking for.</p>
+          <p className="text-muted-foreground mb-6">{t("routes.empty_desc")}</p>
           <Button 
             onClick={() => {
               setSearchTerm("");
@@ -125,7 +125,7 @@ export default function RoutesPage() {
               setMaxDistance(50);
             }}
           >
-            Clear Filters
+            {t("routes.clear_filters")}
           </Button>
         </div>
       )}

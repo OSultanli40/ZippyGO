@@ -1,8 +1,10 @@
 import { tips } from "@/lib/data";
+import { useLanguage } from "@/lib/language";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Shield, Droplets, Shirt, Trash2, CloudSun, Phone } from "lucide-react";
 
 export default function SafetyPage() {
+  const { t } = useLanguage();
   const iconMap: any = {
     Droplets,
     Shirt,
@@ -17,9 +19,9 @@ export default function SafetyPage() {
           <div className="inline-flex items-center justify-center p-3 bg-red-100 text-red-600 rounded-full mb-4">
             <Shield className="h-8 w-8" />
           </div>
-          <h1 className="text-4xl font-display font-bold mb-4">Safety First</h1>
+          <h1 className="text-4xl font-display font-bold mb-4">{t("safety.title")}</h1>
           <p className="text-lg text-muted-foreground">
-            The mountains are beautiful but unpredictable. Follow these essential tips to ensure a safe and enjoyable adventure in Azerbaijan's wilderness.
+            {t("safety.subtitle")}
           </p>
         </div>
 
@@ -46,19 +48,19 @@ export default function SafetyPage() {
               <div className="p-2 bg-red-100 rounded-lg text-destructive">
                 <Phone className="h-6 w-6" />
               </div>
-              <CardTitle className="text-xl">Emergency Contacts</CardTitle>
+              <CardTitle className="text-xl">{t("safety.emergency")}</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                In case of emergency, call these numbers immediately. Cell service may be limited in remote areas.
+                {t("safety.emergency_desc")}
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-background p-3 rounded border border-red-100 text-center">
-                  <span className="block text-xs text-muted-foreground uppercase font-bold">General Emergency</span>
+                  <span className="block text-xs text-muted-foreground uppercase font-bold">{t("safety.general")}</span>
                   <span className="text-2xl font-bold text-destructive">112</span>
                 </div>
                 <div className="bg-background p-3 rounded border border-red-100 text-center">
-                  <span className="block text-xs text-muted-foreground uppercase font-bold">Ambulance</span>
+                  <span className="block text-xs text-muted-foreground uppercase font-bold">{t("safety.ambulance")}</span>
                   <span className="text-2xl font-bold text-destructive">103</span>
                 </div>
               </div>
